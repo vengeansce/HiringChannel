@@ -1,31 +1,26 @@
-import React from 'react';
-import {SafeAreaView, ScrollView} from 'react-native';
-import {Container, Content} from 'native-base';
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
+import {fromLeft} from 'react-navigation-transitions';
 
-import SearchBar from './src/components/SearchBar';
-import Card from './src/components/engineer/Card';
-import Footer from './src/components/Footer';
+import Engineers from './src/screens/Engineers';
+import Employees from './src/screens/Employees';
+import Chat from './src/screens/Chat';
+import Account from './src/screens/Account';
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <SafeAreaView>
-        <ScrollView contentInsetAdjustmentBehavior="automatic">
-          <Container>
-            <SearchBar />
-            <Content>
-              <Card
-                name="William"
-                skills="Tailwind CSS"
-                updated="2d"
-                img="https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png"
-              />
-            </Content>
-            <Footer />
-          </Container>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
+const mainNavigator = createStackNavigator(
+  {
+    Engineers: {screen: Engineers},
+    Employees: {screen: Employees},
+    Chat: {screen: Chat},
+    Account: {screen: Account},
+  },
+  {
+    initialRouteName: 'Engineers',
+    transitionConfig: () => fromLeft(),
+  },
+);
+
+const App = createAppContainer(mainNavigator);
+
 export default App;
+// Bottom tab gak usah ikut kegeser(transition)
