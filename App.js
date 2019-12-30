@@ -1,6 +1,6 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-import {fromLeft} from 'react-navigation-transitions';
+import {fadeIn as transition} from 'react-navigation-transitions';
 
 import Engineers from './src/screens/Engineers';
 import Employees from './src/screens/Employees';
@@ -16,7 +16,7 @@ const mainNavigator = createStackNavigator(
   },
   {
     initialRouteName: 'Engineers',
-    transitionConfig: () => fromLeft(),
+    transitionConfig: () => transition(0),
   },
 );
 

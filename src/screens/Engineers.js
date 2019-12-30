@@ -6,14 +6,17 @@ import SearchBar from '../components/SearchBar';
 import Card from '../components/engineer/Card';
 import Footer from '../components/Footer';
 
+import {timeConverter} from '../helpers/script';
+import {API_ENGINEER_ENDPOINT, API_BASE_URL} from 'react-native-dotenv';
+
 function Engineers(props) {
   const [engineers, setEngineers] = useState([]);
   useEffect(() => {
     axios
-      .get('http://192.168.1.19:8000/api/v1/engineers')
+      .get(API_ENGINEER_ENDPOINT)
       .then(res => setEngineers(res.data.values.result))
       .catch(err => console.warn(err));
-  });
+  }, []);
   return (
     <>
       <Container>
@@ -23,8 +26,9 @@ function Engineers(props) {
             <Card
               name={elm.name}
               skills={elm.skills}
-              updated="2d"
-              img="https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png"
+              updated={timeConverter(elm.updated)}
+              salary={elm.salary}
+              img={API_BASE_URL + elm.img}
               key={i}
             />
           ))}
@@ -40,4 +44,3 @@ Engineers.navigationOptions = {
 };
 
 export default Engineers;
-// Error ngerequest trus
