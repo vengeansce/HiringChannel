@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from 'react';
-import axios from 'axios';
+import React, {useEffect} from 'react';
 import {Container, Content} from 'native-base';
 
 import SearchBar from '../components/SearchBar';
@@ -7,16 +6,14 @@ import Card from '../components/engineer/Card';
 import Footer from '../components/Footer';
 
 import {timeConverter} from '../helpers/script';
-import {API_ENGINEER_ENDPOINT, API_BASE_URL} from 'react-native-dotenv';
+import {API_BASE_URL} from 'react-native-dotenv';
+
+import RootContext from '../context';
 
 function Engineers(props) {
-  const [engineers, setEngineers] = useState([]);
-  useEffect(() => {
-    axios
-      .get(API_ENGINEER_ENDPOINT)
-      .then(res => setEngineers(res.data.values.result))
-      .catch(err => console.warn(err));
-  }, []);
+  const {dispatch, engineers} = React.useContext(RootContext);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => dispatch.fetchEngineers(), []);
   return (
     <>
       <Container>
