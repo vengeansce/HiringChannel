@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {query, getEngineers} from './engineer';
 
 const RootContext = React.createContext();
@@ -11,11 +11,12 @@ export function Provider(props) {
 
   const dispatch = {
     fetchEngineers,
-    setQueryParam: payload => {
-      setQueryParam({...queryParam, ...payload});
-      fetchEngineers();
-    },
+    setQueryParam: payload => setQueryParam({...queryParam, ...payload}),
   };
+
+  useEffect(() => {
+    fetchEngineers();
+  }, [queryParam]);
 
   return (
     <RootContext.Provider value={{engineers, queryParam, dispatch}}>

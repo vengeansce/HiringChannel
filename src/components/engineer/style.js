@@ -25,7 +25,7 @@ const style = StyleSheet.create({
   hFull: {height: '100%'},
   w1_2: {width: '50%'},
   px2: {paddingHorizontal: mx},
-  my2: {marginVertical: 10},
+  my2: {marginVertical: 7},
   _pt: {paddingTop: 0},
   _pr: {paddingRight: 0},
   _ml_1: {marginLeft: -mx},

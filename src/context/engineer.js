@@ -10,10 +10,10 @@ const query = {
   sort: 'updated',
 };
 
-function getEngineers({search}, callback) {
+function getEngineers({search, show, sort}, callback) {
   axios
     .get(
-      `${API_ENGINEER_ENDPOINT}?name=${search}&skills=${search}&salary=${search}`,
+      `${API_ENGINEER_ENDPOINT}?name=${search}&skills=${search}&salary=${search}&show=${show}&sort=${sort}`,
     )
     .then(res => callback(res.data.values.result))
     .catch(err => console.warn(err));

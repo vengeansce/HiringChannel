@@ -1,7 +1,7 @@
 import React from 'react';
 import {Header, Item, Input, Icon} from 'native-base';
 
-import RootContext from '../context';
+import RootContext from '../../context';
 
 export default function SearchBar() {
   const {dispatch} = React.useContext(RootContext);
