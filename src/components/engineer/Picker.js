@@ -9,8 +9,10 @@ export default function Options() {
     dispatch,
     queryParam: {show, sort},
   } = React.useContext(RootContext);
-  const onShowValueChange = value => dispatch.setQueryParam({show: value});
-  const onSortValueChange = value => dispatch.setQueryParam({sort: value});
+  const onShowValueChange = value =>
+    dispatch.setQueryParam({show: value, page: 1, more: false});
+  const onSortValueChange = value =>
+    dispatch.setQueryParam({sort: value, page: 1, more: false});
   return (
     <View style={s.flex}>
       <Form>

@@ -8,14 +8,23 @@ const query = {
   nextPage: 2,
   show: 10,
   sort: 'updated',
+  more: false,
 };
 
-function getEngineers({search, show, sort}, callback) {
+function getEngineers({page, search, show, sort}, callback) {
   axios
     .get(
-      `${API_ENGINEER_ENDPOINT}?name=${search}&skills=${search}&salary=${search}&show=${show}&sort=${sort}`,
+      `${API_ENGINEER_ENDPOINT}?page=${page}&name=${search}&skills=${search}&salary=${search}&show=${show}&sort=${sort}`,
     )
-    .then(res => callback(res.data.values.result))
+    .then(res => {
+      const {
+        result,
+        page: currentPage,
+        previousPage,
+        nextPage,
+      } = res.data.values;
+      callback(result, {currentPage, previousPage, nextPage});
+    })
     .catch(err => console.warn(err));
 }
 

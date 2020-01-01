@@ -1,5 +1,6 @@
 import React from 'react';
-import {Container, Content} from 'native-base';
+import {StyleSheet} from 'react-native';
+import {Container, Content, Button, Text} from 'native-base';
 
 import SearchBar from '../components/engineer/SearchBar';
 import Picker from '../components/engineer/Picker';
@@ -12,7 +13,11 @@ import {API_BASE_URL} from 'react-native-dotenv';
 import RootContext from '../context';
 
 function Engineers(props) {
-  const {engineers} = React.useContext(RootContext);
+  const {
+    engineers,
+    queryParam: {nextPage},
+    dispatch,
+  } = React.useContext(RootContext);
   return (
     <>
       <Container>
@@ -29,6 +34,15 @@ function Engineers(props) {
               key={i}
             />
           ))}
+          <Button
+            info
+            transparent
+            style={s.centerH}
+            onPress={() =>
+              dispatch.setQueryParam({page: nextPage, more: true})
+            }>
+            <Text>load more</Text>
+          </Button>
         </Content>
         <Footer active="engineers" {...props} />
       </Container>
@@ -36,8 +50,14 @@ function Engineers(props) {
   );
 }
 
+const s = StyleSheet.create({
+  centerH: {justifyContent: 'center'},
+});
+
 Engineers.navigationOptions = {
   header: null,
 };
 
 export default Engineers;
+
+// set current show pas lagi load more

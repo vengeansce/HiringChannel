@@ -7,7 +7,15 @@ export function Provider(props) {
   let [engineers, setEngineers] = useState([]);
 
   const fetchEngineers = () =>
-    getEngineers(queryParam, data => setEngineers(data));
+    getEngineers(queryParam, (data, {nextPage}) =>
+      setEngineers(prevState => {
+        queryParam.nextPage = nextPage;
+        if (queryParam.more) {
+          return [...prevState, ...data];
+        }
+        return data;
+      }),
+    );
 
   const dispatch = {
     fetchEngineers,
@@ -16,6 +24,7 @@ export function Provider(props) {
 
   useEffect(() => {
     fetchEngineers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryParam]);
 
   return (
