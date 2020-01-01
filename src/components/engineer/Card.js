@@ -14,10 +14,10 @@ import {
 import s from './style';
 
 export default function Card(props) {
-  const {name, skills, updated, salary, img} = props;
+  const {name, skills, updated, salary, img, handlePress} = props;
   return (
     <List style={[s.my2, s.px2]}>
-      <ListItem avatar style={[s.list]}>
+      <ListItem avatar style={[s.list]} onPress={() => handlePress()}>
         <Left style={[s.center, s.hFull, s._pt]}>
           <Thumbnail source={{uri: img}} style={[s._ml_1, s.avatar]} />
         </Left>

@@ -14,6 +14,9 @@ import RootContext from '../context';
 
 function Engineers(props) {
   const {
+    navigation: {navigate},
+  } = props;
+  const {
     engineers,
     queryParam: {nextPage},
     dispatch,
@@ -26,6 +29,7 @@ function Engineers(props) {
           <Picker />
           {engineers.map((elm, i) => (
             <Card
+              handlePress={() => navigate('Engineer', elm)}
               name={elm.name}
               skills={elm.skills}
               updated={timeConverter(elm.updated)}

@@ -2,12 +2,12 @@ import React from 'react';
 import {Footer, FooterTab, Button, Icon, Text} from 'native-base';
 
 export default function Footers(props) {
-  const {active, navigation} = props;
-  const {navigate} = navigation;
+  const {
+    active,
+    navigation: {navigate},
+  } = props;
 
-  function activeTab(tab) {
-    return active === tab ? true : false;
-  }
+  const activeTab = tab => (active === tab ? true : false);
   const tab = {
     engineers: activeTab('engineers'),
     employees: activeTab('employees'),
