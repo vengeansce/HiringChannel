@@ -64,4 +64,5 @@ Engineers.navigationOptions = {
 
 export default Engineers;
 
+// Kasih background putih pucet trus cardnya putih kyk di profile
 // set current show pas lagi load more
