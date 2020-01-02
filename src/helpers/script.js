@@ -1,4 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'axios';
+
+import {
+  API_ENGINEER_ENDPOINT,
+  API_EMPLOYEE_ENDPOINT,
+} from 'react-native-dotenv';
 
 const sessionCheck = async _ => {
   try {
@@ -6,6 +12,53 @@ const sessionCheck = async _ => {
   } catch (err) {
     return 0;
   }
+};
+
+const clearSession = async callback => {
+  try {
+    await AsyncStorage.clear();
+  } catch (e) {
+    alert('Ops, something error');
+  }
+
+  callback();
+};
+
+const getDataStorage = async (item, callback) => {
+  try {
+    const value = await AsyncStorage.getItem(item);
+    callback(value);
+  } catch (err) {
+    callback(null);
+  }
+};
+
+const fetchEngineer = (id, callback) => {
+  axios
+    .get(`${API_ENGINEER_ENDPOINT}/${id}`)
+    .then(res => {
+      const {values} = res.data;
+      if (values.length > 0) {
+        callback(values[0]);
+      } else {
+        callback(null);
+      }
+    })
+    .catch(() => callback(null));
+};
+
+const fetchEmployee = (id, callback) => {
+  axios
+    .get(`${API_EMPLOYEE_ENDPOINT}/${id}`)
+    .then(res => {
+      const {values} = res.data;
+      if (values.length > 0) {
+        callback(values[0]);
+      } else {
+        callback(null);
+      }
+    })
+    .catch(() => callback(null));
 };
 
 function timeConverter(menit) {
@@ -40,4 +93,12 @@ function validExtension(ext, acceptableExts) {
   return false;
 }
 
-export {timeConverter, validExtension, sessionCheck};
+export {
+  timeConverter,
+  validExtension,
+  sessionCheck,
+  clearSession,
+  fetchEngineer,
+  fetchEmployee,
+  getDataStorage,
+};

@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {View, TextInput} from 'react-native';
 import {Container, H1, Text, Button} from 'native-base';
 
-import {sessionCheck} from '../helpers/script';
+import {getDataStorage} from '../helpers/script';
 import s from '../style';
 
 import {API_ENDPOINT} from 'react-native-dotenv';
@@ -13,9 +13,11 @@ const Login = props => {
   const {
     navigation: {navigate},
   } = props;
-  if (sessionCheck !== 0) {
-    navigate('Engineers');
-  }
+  getDataStorage('token', token => {
+    if (token !== null) {
+      navigate('Engineers');
+    }
+  });
   let [user, setUser] = useState('');
   let [password, setPassword] = useState('');
   const storeData = async data => {
