@@ -1,10 +1,20 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 
+import {Toast} from 'native-base';
+
 import {
   API_ENGINEER_ENDPOINT,
   API_EMPLOYEE_ENDPOINT,
 } from 'react-native-dotenv';
+
+const toastr = (message, type) => {
+  Toast.show({
+    text: message,
+    buttonText: 'Okay',
+    type,
+  });
+};
 
 const sessionCheck = async _ => {
   try {
@@ -18,7 +28,7 @@ const clearSession = async callback => {
   try {
     await AsyncStorage.clear();
   } catch (e) {
-    alert('Ops, something error');
+    toastr('Ops, something error');
   }
 
   callback();
@@ -101,4 +111,5 @@ export {
   fetchEngineer,
   fetchEmployee,
   getDataStorage,
+  toastr,
 };

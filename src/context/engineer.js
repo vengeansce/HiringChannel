@@ -25,6 +25,7 @@ function getEngineers({page, search, show, sort}, callback) {
       } = res.data.values;
       callback(result, {currentPage, previousPage, nextPage});
     })
+    // Kalo catch satu baris error
     .catch(err => console.warn(err));
 }
 

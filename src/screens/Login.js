@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-import {View, TextInput} from 'react-native';
+import {View, TextInput, ActivityIndicator} from 'react-native';
 import {Container, H1, Text, Button} from 'native-base';
 
-import {getDataStorage} from '../helpers/script';
+import {getDataStorage, toastr} from '../helpers/script';
 import s from '../style';
 
 import {API_ENDPOINT} from 'react-native-dotenv';
@@ -20,6 +20,10 @@ const Login = props => {
   });
   let [user, setUser] = useState('');
   let [password, setPassword] = useState('');
+  let [config, setConfig] = useState({
+    loading: false,
+    error: false,
+  });
   const storeData = async data => {
     try {
       await AsyncStorage.setItem('token', data.token);
@@ -32,13 +36,24 @@ const Login = props => {
     }
   };
   const loginUser = _ => {
+    if (!user || !password) {
+      toastr('Please fill out all of this field.');
+      return;
+    }
+    setConfig({loading: true, error: false});
     axios
       .post(`${API_ENDPOINT}login`, {
         user,
         password,
       })
-      .then(res => storeData(res.data.values))
-      .catch(() => alert('Incorrect username or password.'));
+      .then(res => {
+        setConfig({loading: false, error: false});
+        storeData(res.data.values);
+      })
+      .catch(() => {
+        setConfig({loading: false, error: true});
+        toastr('Incorrect username or password.');
+      });
   };
   return (
     <Container style={s.center}>
@@ -64,8 +79,16 @@ const Login = props => {
           />
         </View>
         <View style={s.section}>
-          <Button bordered style={s.center} onPress={loginUser}>
-            <Text>Login</Text>
+          <Button
+            bordered
+            style={s.center}
+            disabled={config.loading}
+            onPress={loginUser}>
+            {config.loading ? (
+              <ActivityIndicator size="small" color="#3f51b5" />
+            ) : (
+              <Text>Login</Text>
+            )}
           </Button>
         </View>
         <View style={[s.section, s.register]}>

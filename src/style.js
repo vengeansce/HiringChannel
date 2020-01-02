@@ -9,6 +9,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  picker: {width: 150, height: 24},
   section: {marginVertical: 15},
   input: {
     borderColor: 'rgba(0, 98, 204, .8)',

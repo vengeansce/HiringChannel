@@ -1,4 +1,5 @@
 import React from 'react';
+import {Root} from 'native-base';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {fadeIn as transition} from 'react-navigation-transitions';
@@ -33,7 +34,9 @@ const AppContainer = createAppContainer(mainNavigator);
 
 const App = () => (
   <Provider>
-    <AppContainer />
+    <Root>
+      <AppContainer />
+    </Root>
   </Provider>
 );
 

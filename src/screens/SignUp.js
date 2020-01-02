@@ -1,43 +1,57 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import {View, TextInput} from 'react-native';
+import {View, TextInput, ActivityIndicator} from 'react-native';
 import {Container, H1, Text, Button, Picker, Icon} from 'native-base';
 import s from '../style';
 
-import {API_ENGINEER_ENDPOINT} from 'react-native-dotenv';
+import {toastr} from '../helpers/script';
+import {API_ENDPOINT} from 'react-native-dotenv';
 
 const SignUp = props => {
-  const {navigation} = props;
+  const {
+    navigation: {goBack},
+  } = props;
   let [role, setRole] = useState('engineers');
   let [name, setName] = useState('');
   let [username, setUsername] = useState('');
   let [email, setEmail] = useState('');
   let [password, setPassword] = useState('');
+  let [config, setConfig] = useState({
+    loading: false,
+    error: false,
+  });
 
   const handleSubmit = () => {
+    if (!name || !username || !email || !password) {
+      toastr('Please fill out all of this field.');
+      return;
+    }
+    setConfig({loading: true, error: false});
     axios
-      .post(`${API_ENGINEER_ENDPOINT}/signup`, {
+      .post(`${API_ENDPOINT + role}/signup`, {
         name,
         username,
         email,
         password,
       })
       .then(() => {
-        this.setState({alert: 'block', notDisabled: true});
+        setConfig({loading: false, error: false});
+        toastr(
+          'Your account successfully registered. You can login now!',
+          'success',
+        );
+        goBack();
       })
       .catch(() => {
-        this.setState({
-          displayError: 'block',
-          errorMessage: 'Username or email already registered',
-          notDisabled: true,
-        });
+        setConfig({loading: false, error: true});
+        toastr('Username or email already registered');
       });
   };
   return (
     <Container style={s.center}>
       <View style={s.container}>
         <H1 style={[s.textCenter, s.header]}>Hiring Channel</H1>
-        <View style={s.section}>
+        <View style={[s.section, s.center]}>
           <Picker
             mode="dropdown"
             iosIcon={<Icon name="arrow-down" />}
@@ -45,7 +59,7 @@ const SignUp = props => {
             // eslint-disable-next-line react-native/no-inline-styles
             placeholderStyle={{color: '#bfc6ea'}}
             placeholderIconColor="#007aff"
-            style={{width: undefined}}
+            style={s.picker}
             selectedValue={role}
             onValueChange={value => setRole(value)}>
             <Picker.Item label="Engineer" value="engineers" />
@@ -87,15 +101,20 @@ const SignUp = props => {
         </View>
         <View style={s.section}>
           <Button
+            disabled={config.loading}
             bordered
             style={s.center}
-            onPress={() => alert('Eits, idak bisa')}>
-            <Text>Sign Up</Text>
+            onPress={handleSubmit}>
+            {config.loading ? (
+              <ActivityIndicator size="small" color="#3f51b5" />
+            ) : (
+              <Text>Sign Up</Text>
+            )}
           </Button>
         </View>
         <View style={[s.section, s.register]}>
           <Text>Already have an account?</Text>
-          <Button info transparent onPress={() => navigation.goBack()}>
+          <Button info transparent onPress={() => goBack()}>
             <Text> Login</Text>
           </Button>
         </View>
