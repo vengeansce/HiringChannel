@@ -15,7 +15,7 @@ import {
 } from 'native-base';
 
 import axios from 'axios';
-import {timeConverter} from '../helpers/script';
+import {timeConverter, toastr} from '../helpers/script';
 import {API_BASE_URL, API_ENGINEER_ENDPOINT} from 'react-native-dotenv';
 
 function Engineer(props) {
@@ -41,7 +41,9 @@ function Engineer(props) {
           setEngineer(res.data.values[0]);
         }
       })
-      .catch(err => console.warn(err));
+      .catch(() => {
+        toastr('Ops, network error');
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

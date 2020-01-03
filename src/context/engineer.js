@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {toastr} from '../helpers/script';
 import {API_ENGINEER_ENDPOINT} from 'react-native-dotenv';
 
 const query = {
@@ -26,7 +27,9 @@ function getEngineers({page, search, show, sort}, callback) {
       callback(result, {currentPage, previousPage, nextPage});
     })
     // Kalo catch satu baris error
-    .catch(err => console.warn(err));
+    .catch(() => {
+      toastr('Ops, network error');
+    });
 }
 
 export {query, getEngineers};

@@ -68,7 +68,9 @@ const fetchEmployee = (id, callback) => {
         callback(null);
       }
     })
-    .catch(() => callback(null));
+    .catch(() => {
+      callback(null);
+    });
 };
 
 function timeConverter(menit) {

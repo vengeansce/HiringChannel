@@ -35,7 +35,7 @@ const Login = props => {
       console.warn(err);
     }
   };
-  const loginUser = _ => {
+  const loginUser = () => {
     if (!user || !password) {
       toastr('Please fill out all of this field.');
       return;
