@@ -63,7 +63,7 @@ const SignUp = props => {
             selectedValue={role}
             onValueChange={value => setRole(value)}>
             <Picker.Item label="Engineer" value="engineers" />
-            <Picker.Item label="Employee" value="companies" />
+            <Picker.Item label="Company" value="companies" />
           </Picker>
         </View>
         <View style={s.section}>

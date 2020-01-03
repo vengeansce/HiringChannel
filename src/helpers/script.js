@@ -69,7 +69,7 @@ const fetchEngineer = (id, callback) => {
     });
 };
 
-const fetchEmployee = (id, callback) => {
+const fetchCompany = (id, callback) => {
   axios
     .get(`${API_EMPLOYEE_ENDPOINT}/${id}`)
     .then(res => {
@@ -123,7 +123,7 @@ export {
   sessionCheck,
   clearSession,
   fetchEngineer,
-  fetchEmployee,
+  fetchCompany,
   getDataStorage,
   getMultipleDataStorage,
   toastr,

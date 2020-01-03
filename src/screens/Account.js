@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 
-import EmployeeAccount from '../components/employee/Profile';
+import CompanyAccount from '../components/company/Profile';
 import EngineerAccount from '../components/engineer/Profile';
 import {getDataStorage} from '../helpers/script';
 
@@ -11,7 +11,7 @@ const Account = props => {
   });
   return (
     <>
-      {role === 'company' && <EmployeeAccount {...props} />}
+      {role === 'company' && <CompanyAccount {...props} />}
       {role === 'engineer' && <EngineerAccount {...props} />}
     </>
   );

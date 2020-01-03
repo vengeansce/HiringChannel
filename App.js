@@ -8,7 +8,7 @@ import Login from './src/screens/Login';
 import SignUp from './src/screens/SignUp';
 import Engineers from './src/screens/Engineers';
 import Engineer from './src/screens/Engineer';
-import Employees from './src/screens/Employees';
+import Companies from './src/screens/Companies';
 import Chat from './src/screens/Chat';
 import Account from './src/screens/Account';
 
@@ -20,7 +20,7 @@ const mainNavigator = createStackNavigator(
     SignUp: {screen: SignUp},
     Engineers: {screen: Engineers},
     Engineer: {screen: Engineer},
-    Employees: {screen: Employees},
+    Companies: {screen: Companies},
     Chat: {screen: Chat},
     Account: {screen: Account},
   },

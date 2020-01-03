@@ -3,19 +3,19 @@ import {Text} from 'react-native';
 import {Container, Content} from 'native-base';
 import Footer from '../components/Footer';
 
-function Employees(props) {
+function Companies(props) {
   return (
     <Container>
       <Content>
-        <Text>Employees</Text>
+        <Text>Companies</Text>
       </Content>
-      <Footer active="employees" {...props} />
+      <Footer active="companys" {...props} />
     </Container>
   );
 }
 
-Employees.navigationOptions = {
+Companies.navigationOptions = {
   header: null,
 };
 
-export default Employees;
+export default Companies;

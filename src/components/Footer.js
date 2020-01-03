@@ -10,7 +10,7 @@ export default function Footers(props) {
   const activeTab = tab => (active === tab ? true : false);
   const tab = {
     engineers: activeTab('engineers'),
-    employees: activeTab('employees'),
+    companys: activeTab('companys'),
     chat: activeTab('chat'),
     account: activeTab('account'),
   };
@@ -28,11 +28,11 @@ export default function Footers(props) {
           <Text>Engineer</Text>
         </Button>
         <Button
-          active={tab.employees}
+          active={tab.companys}
           vertical
-          onPress={() => navigate('Employees')}>
-          <Icon active={tab.employees} name="aperture" />
-          <Text>Employee</Text>
+          onPress={() => navigate('Companies')}>
+          <Icon active={tab.companys} name="aperture" />
+          <Text>Company</Text>
         </Button>
         <Button active={tab.chat} vertical onPress={() => navigate('Chat')}>
           <Icon active={tab.chat} name="text" />

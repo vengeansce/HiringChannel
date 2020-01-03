@@ -16,11 +16,7 @@ import {
 } from 'native-base';
 import Footer from '../Footer';
 
-import {
-  fetchEmployee,
-  getDataStorage,
-  clearSession,
-} from '../../helpers/script';
+import {fetchCompany, getDataStorage, clearSession} from '../../helpers/script';
 import {API_BASE_URL} from 'react-native-dotenv';
 import s from '../../style/Profile';
 
@@ -28,7 +24,7 @@ const Account = props => {
   const {
     navigation: {navigate},
   } = props;
-  let [employee, setEmployee] = useState({
+  let [company, setCompany] = useState({
     name: '',
     location: '',
     img: '',
@@ -38,7 +34,7 @@ const Account = props => {
   useEffect(() => {
     getDataStorage('id', id => {
       if (id !== null) {
-        fetchEmployee(id, data => setEmployee(data));
+        fetchCompany(id, data => setCompany(data));
       } else {
         navigate('Login');
       }
@@ -62,7 +58,7 @@ const Account = props => {
       </Header>
       <Content style={s.px}>
         <View style={[s.centerX, s.py2]}>
-          <Image source={{uri: API_BASE_URL + employee.img}} style={s.img} />
+          <Image source={{uri: API_BASE_URL + company.img}} style={s.img} />
         </View>
         <View>
           <Text>Description</Text>
@@ -71,25 +67,23 @@ const Account = props => {
               rowSpan={5}
               bordered
               placeholder="Description"
-              value={employee.description}
-              onChangeText={text =>
-                setEmployee({...employee, description: text})
-              }
+              value={company.description}
+              onChangeText={text => setCompany({...company, description: text})}
             />
           </Form>
         </View>
         <View>
           <Item>
             <Input
-              value={employee.name}
-              onChangeText={text => setEmployee({...employee, name: text})}
+              value={company.name}
+              onChangeText={text => setCompany({...company, name: text})}
             />
             <Text style={s.pr}>Name</Text>
           </Item>
           <Item>
             <Input
-              value={employee.location}
-              onChangeText={text => setEmployee({...employee, location: text})}
+              value={company.location}
+              onChangeText={text => setCompany({...company, location: text})}
             />
             <Text style={s.pr}>Address</Text>
           </Item>
