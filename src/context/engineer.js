@@ -27,7 +27,8 @@ function getEngineers({page, search, show, sort}, callback) {
       callback(result, {currentPage, previousPage, nextPage});
     })
     // Kalo catch satu baris error
-    .catch(() => {
+    .catch(err => {
+      console.warn(err);
       toastr('Ops, network error');
     });
 }

@@ -43,6 +43,16 @@ const getDataStorage = async (item, callback) => {
   }
 };
 
+const getMultipleDataStorage = async (item, callback) => {
+  let value;
+  try {
+    value = await AsyncStorage.multiGet(item);
+  } catch (err) {
+    callback(null);
+  }
+  callback(value);
+};
+
 const fetchEngineer = (id, callback) => {
   axios
     .get(`${API_ENGINEER_ENDPOINT}/${id}`)
@@ -54,7 +64,9 @@ const fetchEngineer = (id, callback) => {
         callback(null);
       }
     })
-    .catch(() => callback(null));
+    .catch(() => {
+      callback(null);
+    });
 };
 
 const fetchEmployee = (id, callback) => {
@@ -113,5 +125,6 @@ export {
   fetchEngineer,
   fetchEmployee,
   getDataStorage,
+  getMultipleDataStorage,
   toastr,
 };
