@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import FormData from 'form-data';
-import {Image, View} from 'react-native';
+import moment from 'moment';
+import {ImageBackground, View} from 'react-native';
 import {
   Container,
   Text,
@@ -12,9 +13,11 @@ import {
   Title,
   Item,
   Input,
+  DatePicker,
   Form,
   Textarea,
   Button,
+  Icon,
 } from 'native-base';
 import Footer from '../Footer';
 
@@ -22,9 +25,23 @@ import {
   fetchEngineer,
   getMultipleDataStorage,
   clearSession,
+  toastr,
+  validExtension,
 } from '../../helpers/script';
 import {API_BASE_URL, API_ENDPOINT} from 'react-native-dotenv';
 import s from '../../style/Profile';
+
+import ImagePicker from 'react-native-image-picker';
+const options = {
+  title: 'Profile Picture',
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
+
+const defaultImg =
+  'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png';
 
 const Account = props => {
   const {
@@ -41,6 +58,10 @@ const Account = props => {
     id: '',
     token: '',
   });
+  useEffect(() => {
+    setProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const setProfile = () => {
     getMultipleDataStorage(['id', 'token'], values => {
       const id = values[0][1];
@@ -48,7 +69,14 @@ const Account = props => {
       if (id !== null) {
         fetchEngineer(id, data => {
           if (data) {
-            setEngineer({...data, id, token});
+            console.warn(data.img);
+            setEngineer({
+              ...data,
+              birthdate: data.birthdate.split('T')[0],
+              img: data.img ? API_BASE_URL + engineer.img : defaultImg,
+              id,
+              token,
+            });
           } else {
             navigate('Login');
           }
@@ -62,7 +90,7 @@ const Account = props => {
     const form = new FormData();
     form.append('name', engineer.name);
     form.append('description', engineer.description);
-    form.append('location', engineer.address);
+    form.append('location', engineer.location);
     form.append('skills', engineer.skills);
     form.append('birthdate', engineer.birthdate);
     form.append('img', engineer.img);
@@ -77,16 +105,30 @@ const Account = props => {
       })
       .then(() => {
         setProfile();
+        toastr('Profile updated successfully', 'success');
       })
       .catch(() => {
-        // eslint-disable-next-line no-alert
-        alert('File too big. Max: 1mb');
+        toastr('File too large. Max: 1mb');
       });
   };
-  useEffect(() => {
-    setProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  function chooseImage() {
+    ImagePicker.showImagePicker(options, res => {
+      if (!res.didCancel && !res.error && !res.customButton) {
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + res.data };
+        const {fileName, uri} = res;
+        const split = fileName.split('.');
+        const ext = split[split.length - 1].toLocaleLowerCase();
+        const acceptableExts = ['png', 'jpg', 'jpeg'];
+
+        if (validExtension(ext, acceptableExts) !== true) {
+          toastr('File not accepted.');
+        } else {
+          setEngineer({...engineer, img: uri});
+        }
+      }
+    });
+  }
   return (
     <Container>
       <Header>
@@ -105,13 +147,21 @@ const Account = props => {
       </Header>
       <Content style={s.px}>
         <View style={[s.centerX, s.py2]}>
-          <Image source={{uri: API_BASE_URL + engineer.img}} style={s.img} />
+          <ImageBackground
+            source={{
+              uri: engineer.img,
+            }}
+            style={[s.img, s.relative]}>
+            <Button rounded style={s.camera} onPress={chooseImage}>
+              <Icon name="camera" />
+            </Button>
+          </ImageBackground>
         </View>
         <View>
           <Text>About Me</Text>
           <Form>
             <Textarea
-              rowSpan={5}
+              rowSpan={3}
               bordered
               placeholder="Make it as long and as crazy as you'd like"
               value={engineer.description}
@@ -138,11 +188,25 @@ const Account = props => {
             <Text style={s.pr}>Skills</Text>
           </Item>
           <Item>
-            <Input
-              placeholder="2020-01-03"
-              value={engineer.birthdate.split('T')[0]}
-              onChangeText={text => setEngineer({...engineer, birthdate: text})}
-            />
+            <View style={s.datePicker}>
+              <DatePicker
+                locale={'en'}
+                timeZoneOffsetInMinutes={undefined}
+                modalTransparent={false}
+                animationType={'fade'}
+                androidMode={'default'}
+                placeHolderText={engineer.birthdate}
+                textStyle={[s.dateText, s.date]}
+                placeHolderTextStyle={[s.datePlaceholder, s.date]}
+                onDateChange={date =>
+                  setEngineer({
+                    ...engineer,
+                    birthdate: moment(date).format('YYYY-MM-DD'),
+                  })
+                }
+                disabled={false}
+              />
+            </View>
             <Text style={s.pr}>Birthdate</Text>
           </Item>
           <Item>
