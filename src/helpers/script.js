@@ -3,6 +3,15 @@ import axios from 'axios';
 
 import {Toast} from 'native-base';
 
+import ImagePicker from 'react-native-image-picker';
+const options = {
+  title: 'Profile Picture',
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
+
 import {
   API_ENGINEER_ENDPOINT,
   API_EMPLOYEE_ENDPOINT,
@@ -117,9 +126,36 @@ function validExtension(ext, acceptableExts) {
   return false;
 }
 
+function validateImage(fileName, fileSize) {
+  const split = fileName.split('.');
+  const ext = split[split.length - 1].toLocaleLowerCase();
+  const acceptableExts = ['png', 'jpg', 'jpeg'];
+  if (validExtension(ext, acceptableExts) !== true) {
+    toastr('Image not accepted.');
+  } else if (fileSize > 1024 * 1024) {
+    toastr('Image too large. Max: 1mb');
+  } else {
+    return true;
+  }
+}
+
+function launchImageLibrary(callback) {
+  ImagePicker.launchImageLibrary(options, res => {
+    if (!res.didCancel && !res.error && !res.customButton) {
+      const {fileName, fileSize} = res;
+      const isValid = validateImage(fileName, fileSize);
+      if (isValid) {
+        callback(res);
+      }
+    }
+  });
+}
+
 export {
   timeConverter,
   validExtension,
+  validateImage,
+  launchImageLibrary,
   sessionCheck,
   clearSession,
   fetchEngineer,

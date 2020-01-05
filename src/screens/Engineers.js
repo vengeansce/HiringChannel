@@ -12,6 +12,9 @@ import {API_BASE_URL} from 'react-native-dotenv';
 
 import RootContext from '../context';
 
+const defaultImg =
+  'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png';
+
 function Engineers(props) {
   const {
     navigation: {navigate},
@@ -21,6 +24,7 @@ function Engineers(props) {
     queryParam: {nextPage},
     dispatch,
   } = React.useContext(RootContext);
+  console.log(engineers[0]);
   return (
     <>
       <Container>
@@ -34,7 +38,7 @@ function Engineers(props) {
               skills={elm.skills}
               updated={timeConverter(elm.updated)}
               salary={elm.salary}
-              img={(() => API_BASE_URL + elm.img)()}
+              img={(() => (elm.img ? API_BASE_URL + elm.img : defaultImg))()}
               key={i}
             />
           ))}

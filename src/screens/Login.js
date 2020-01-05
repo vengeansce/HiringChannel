@@ -32,7 +32,7 @@ const Login = props => {
       await AsyncStorage.setItem('role', data.role);
       navigate('Engineers');
     } catch (err) {
-      console.warn(err);
+      console.log(err);
     }
   };
   const loginUser = () => {
@@ -51,7 +51,7 @@ const Login = props => {
         storeData(res.data.values);
       })
       .catch(err => {
-        console.warn(err);
+        console.log(err);
         setConfig({loading: false, error: true});
         toastr('Incorrect username or password.');
       });

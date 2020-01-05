@@ -26,19 +26,10 @@ import {
   getMultipleDataStorage,
   clearSession,
   toastr,
-  validExtension,
+  launchImageLibrary,
 } from '../../helpers/script';
 import {API_BASE_URL, API_ENDPOINT} from 'react-native-dotenv';
 import s from '../../style/Profile';
-
-import ImagePicker from 'react-native-image-picker';
-const options = {
-  title: 'Profile Picture',
-  storageOptions: {
-    skipBackup: true,
-    path: 'images',
-  },
-};
 
 const defaultImg =
   'https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png';
@@ -69,10 +60,11 @@ const Account = props => {
       if (id !== null) {
         fetchEngineer(id, data => {
           if (data) {
+            const uri = data.img ? API_BASE_URL + data.img : defaultImg;
             setEngineer({
               ...data,
               birthdate: data.birthdate.split('T')[0],
-              img: {uri: data.img ? API_BASE_URL + data.img : defaultImg},
+              img: {uri, type: 'image/jpeg', name: uri},
               id,
               token,
             });
@@ -108,27 +100,16 @@ const Account = props => {
       })
       .catch(() => {
         // toastr('File too large. Max: 1mb');
-        toastr('Ops, something error.');
+        toastr('Please choose a picture again.');
       });
   };
-  function chooseImage() {
-    ImagePicker.showImagePicker(options, res => {
-      if (!res.didCancel && !res.error && !res.customButton) {
-        const {fileName, fileSize, type, uri} = res;
-        const split = fileName.split('.');
-        const ext = split[split.length - 1].toLocaleLowerCase();
-        const acceptableExts = ['png', 'jpg', 'jpeg'];
-        if (validExtension(ext, acceptableExts) !== true) {
-          toastr('File not accepted.');
-        } else if (fileSize > 1024 * 1024) {
-          toastr('File too large.');
-        } else {
-          setEngineer({
-            ...engineer,
-            img: {uri, type, name: fileName},
-          });
-        }
-      }
+  function pickImage() {
+    launchImageLibrary(res => {
+      const {fileName, type, uri} = res;
+      setEngineer({
+        ...engineer,
+        img: {uri, type, name: fileName},
+      });
     });
   }
   return (
@@ -153,10 +134,19 @@ const Account = props => {
             source={{
               uri: engineer.img.uri,
             }}
-            style={[s.img, s.relative]}>
-            <Button rounded style={s.camera} onPress={chooseImage}>
-              <Icon name="camera" />
+            style={[s.img, s.relative]}
+            imageStyle={s.imageBackground}>
+            <Button style={[s.camera, s.center]} onPress={pickImage}>
+              <Icon name="camera" style={s.cameraIcon} />
             </Button>
+            {/* //If file exist but image doesn't show up */}
+            <ImageBackground
+              source={{
+                uri: defaultImg,
+              }}
+              style={[s.img, s.defaulImg]}
+              imageStyle={s.imageBackground}
+            />
           </ImageBackground>
         </View>
         <View>

@@ -20,6 +20,8 @@ const style = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  relative: {position: 'relative'},
+  defaultImg: {position: 'absolute', zIndex: -1},
   textRight: {textAlign: 'right'},
   flex: {flex: 1, flexDirection: 'row'},
   hFull: {height: '100%'},

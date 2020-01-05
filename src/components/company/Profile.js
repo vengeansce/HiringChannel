@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {Image, View} from 'react-native';
+import axios from 'axios';
+import {ImageBackground, View} from 'react-native';
 import {
   Container,
   Text,
@@ -13,12 +14,21 @@ import {
   Form,
   Textarea,
   Button,
+  Icon,
 } from 'native-base';
 import Footer from '../Footer';
 
-import {fetchCompany, getDataStorage, clearSession} from '../../helpers/script';
-import {API_BASE_URL} from 'react-native-dotenv';
+import {
+  toastr,
+  fetchCompany,
+  getMultipleDataStorage,
+  clearSession,
+  launchImageLibrary,
+} from '../../helpers/script';
+import {API_BASE_URL, API_ENDPOINT} from 'react-native-dotenv';
 import s from '../../style/Profile';
+const defaultImg =
+  'https://pngimage.net/wp-content/uploads/2018/06/icon-perusahaan-png-1.png';
 
 const Account = props => {
   const {
@@ -30,16 +40,68 @@ const Account = props => {
     img: '',
     email: '',
     description: '',
+    id: '',
+    token: '',
   });
   useEffect(() => {
-    getDataStorage('id', id => {
+    setProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const setProfile = () => {
+    getMultipleDataStorage(['id', 'token'], values => {
+      const id = values[0][1];
+      const token = values[1][1];
       if (id !== null) {
-        fetchCompany(id, data => setCompany(data));
+        fetchCompany(id, data => {
+          if (data) {
+            const uri = data.img ? API_BASE_URL + data.img : defaultImg;
+            setCompany({
+              ...data,
+              img: {uri, type: 'image/jpeg', name: uri},
+              id,
+              token,
+            });
+          } else {
+            navigate('Login');
+          }
+        });
       } else {
         navigate('Login');
       }
     });
-  }, [navigate]);
+  };
+  const updateProfile = () => {
+    const form = new FormData();
+    form.append('name', company.name);
+    form.append('description', company.description);
+    form.append('location', company.location);
+    form.append('img', company.img);
+    form.append('id', company.id);
+
+    axios
+      .put(`${API_ENDPOINT}?token=${company.token}`, form, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(() => {
+        setProfile();
+        toastr('Profile updated successfully', 'success');
+      })
+      .catch(() => {
+        // toastr('File too large. Max: 1mb');
+        toastr('Please choose a picture again.');
+      });
+  };
+  function pickImage() {
+    launchImageLibrary(res => {
+      const {fileName, type, uri} = res;
+      setCompany({
+        ...company,
+        img: {uri, type, name: fileName},
+      });
+    });
+  }
   return (
     <Container>
       <Header>
@@ -58,7 +120,24 @@ const Account = props => {
       </Header>
       <Content style={s.px}>
         <View style={[s.centerX, s.py2]}>
-          <Image source={{uri: API_BASE_URL + company.img}} style={s.img} />
+          <ImageBackground
+            source={{
+              uri: company.img.uri,
+            }}
+            style={[s.img, s.relative]}
+            imageStyle={s.imageBackground}>
+            <Button style={[s.camera, s.center]} onPress={pickImage}>
+              <Icon name="camera" style={s.cameraIcon} />
+            </Button>
+            {/* //If file exist but image doesn't show up */}
+            <ImageBackground
+              source={{
+                uri: defaultImg,
+              }}
+              style={[s.img, s.defaulImg]}
+              imageStyle={s.imageBackground}
+            />
+          </ImageBackground>
         </View>
         <View>
           <Text>Description</Text>
@@ -66,7 +145,7 @@ const Account = props => {
             <Textarea
               rowSpan={5}
               bordered
-              placeholder="Description"
+              placeholder="About company"
               value={company.description}
               onChangeText={text => setCompany({...company, description: text})}
             />
@@ -89,7 +168,7 @@ const Account = props => {
           </Item>
         </View>
         <View style={s.px2}>
-          <Button success block style={s.my}>
+          <Button success block style={s.my} onPress={updateProfile}>
             <Text>Update</Text>
           </Button>
           <Button
