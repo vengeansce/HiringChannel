@@ -108,7 +108,7 @@ function timeConverter(menit) {
     return `${Math.round(menit / hari)} days ago`;
   }
   if (menit > 60) {
-    return `${Math.round(menit / 60)}hours ago`;
+    return `${Math.round(menit / 60)} hours ago`;
   }
   if (menit === 0) {
     return 'A few seconds ago';

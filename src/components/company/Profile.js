@@ -143,7 +143,7 @@ const Account = props => {
           <Text>Description</Text>
           <Form>
             <Textarea
-              rowSpan={5}
+              rowSpan={3}
               bordered
               placeholder="About company"
               value={company.description}

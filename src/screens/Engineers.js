@@ -21,10 +21,9 @@ function Engineers(props) {
   } = props;
   const {
     engineers,
-    queryParam: {nextPage},
+    engineersQuery: {nextPage},
     dispatch,
   } = React.useContext(RootContext);
-  console.log(engineers[0]);
   return (
     <>
       <Container>
@@ -47,7 +46,7 @@ function Engineers(props) {
             transparent
             style={s.centerH}
             onPress={() =>
-              dispatch.setQueryParam({page: nextPage, more: true})
+              dispatch.setEngineersQuery({page: nextPage, more: true})
             }>
             <Text>load more</Text>
           </Button>

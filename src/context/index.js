@@ -1,16 +1,31 @@
 import React, {useState, useEffect} from 'react';
-import {query, getEngineers} from './engineer';
+import {query as engineersInitialState, getEngineers} from './engineer';
+import {query as companiesInitialState, getCompanies} from './company';
 
 const RootContext = React.createContext();
 export function Provider(props) {
-  let [queryParam, setQueryParam] = useState(query);
+  let [engineersQuery, setEngineersQuery] = useState(engineersInitialState);
   let [engineers, setEngineers] = useState([]);
 
   const fetchEngineers = () =>
-    getEngineers(queryParam, (data, {nextPage}) =>
+    getEngineers(engineersQuery, (data, {nextPage}) =>
       setEngineers(prevState => {
-        queryParam.nextPage = nextPage;
-        if (queryParam.more) {
+        engineersQuery.nextPage = nextPage;
+        if (engineersQuery.more) {
+          return [...prevState, ...data];
+        }
+        return data;
+      }),
+    );
+
+  let [companiesQuery, setCompaniesQuery] = useState(companiesInitialState);
+  let [companies, setCompanies] = useState([]);
+
+  const fetchCompanies = () =>
+    getCompanies(companiesQuery, (data, {nextPage}) =>
+      setCompanies(prevState => {
+        companiesQuery.nextPage = nextPage;
+        if (companiesQuery.more) {
           return [...prevState, ...data];
         }
         return data;
@@ -19,16 +34,22 @@ export function Provider(props) {
 
   const dispatch = {
     fetchEngineers,
-    setQueryParam: payload => setQueryParam({...queryParam, ...payload}),
+    setEngineersQuery: payload =>
+      setEngineersQuery({...engineersQuery, ...payload}),
+    fetchCompanies,
+    setCompaniesQuery: payload =>
+      setCompaniesQuery({...companiesQuery, ...payload}),
   };
 
   useEffect(() => {
     fetchEngineers();
+    fetchCompanies();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryParam]);
+  }, [engineersQuery, companiesQuery]);
 
   return (
-    <RootContext.Provider value={{engineers, queryParam, dispatch}}>
+    <RootContext.Provider
+      value={{engineers, engineersQuery, companies, companiesQuery, dispatch}}>
       {props.children}
     </RootContext.Provider>
   );

@@ -7,12 +7,12 @@ import RootContext from '../../context';
 export default function Options() {
   const {
     dispatch,
-    queryParam: {show, sort},
+    engineersQuery: {show, sort},
   } = React.useContext(RootContext);
   const onShowValueChange = value =>
-    dispatch.setQueryParam({show: value, page: 1, more: false});
+    dispatch.setEngineersQuery({show: value, page: 1, more: false});
   const onSortValueChange = value =>
-    dispatch.setQueryParam({sort: value, page: 1, more: false});
+    dispatch.setEngineersQuery({sort: value, page: 1, more: false});
   return (
     <View style={s.flex}>
       <Form>
