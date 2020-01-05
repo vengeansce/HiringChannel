@@ -34,7 +34,7 @@ function Engineers(props) {
               skills={elm.skills}
               updated={timeConverter(elm.updated)}
               salary={elm.salary}
-              img={API_BASE_URL + elm.img}
+              img={(() => API_BASE_URL + elm.img)()}
               key={i}
             />
           ))}

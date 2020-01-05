@@ -69,11 +69,10 @@ const Account = props => {
       if (id !== null) {
         fetchEngineer(id, data => {
           if (data) {
-            console.warn(data.img);
             setEngineer({
               ...data,
               birthdate: data.birthdate.split('T')[0],
-              img: data.img ? API_BASE_URL + engineer.img : defaultImg,
+              img: {uri: data.img ? API_BASE_URL + data.img : defaultImg},
               id,
               token,
             });
@@ -100,7 +99,7 @@ const Account = props => {
     axios
       .put(`${API_ENDPOINT}?token=${engineer.token}`, form, {
         headers: {
-          'Content-Type': `multipart/form-data; boundary=${form._boundary}`,
+          'Content-Type': 'multipart/form-data',
         },
       })
       .then(() => {
@@ -108,23 +107,26 @@ const Account = props => {
         toastr('Profile updated successfully', 'success');
       })
       .catch(() => {
-        toastr('File too large. Max: 1mb');
+        // toastr('File too large. Max: 1mb');
+        toastr('Ops, something error.');
       });
   };
   function chooseImage() {
     ImagePicker.showImagePicker(options, res => {
       if (!res.didCancel && !res.error && !res.customButton) {
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + res.data };
-        const {fileName, uri} = res;
+        const {fileName, fileSize, type, uri} = res;
         const split = fileName.split('.');
         const ext = split[split.length - 1].toLocaleLowerCase();
         const acceptableExts = ['png', 'jpg', 'jpeg'];
-
         if (validExtension(ext, acceptableExts) !== true) {
           toastr('File not accepted.');
+        } else if (fileSize > 1024 * 1024) {
+          toastr('File too large.');
         } else {
-          setEngineer({...engineer, img: uri});
+          setEngineer({
+            ...engineer,
+            img: {uri, type, name: fileName},
+          });
         }
       }
     });
@@ -149,7 +151,7 @@ const Account = props => {
         <View style={[s.centerX, s.py2]}>
           <ImageBackground
             source={{
-              uri: engineer.img,
+              uri: engineer.img.uri,
             }}
             style={[s.img, s.relative]}>
             <Button rounded style={s.camera} onPress={chooseImage}>
