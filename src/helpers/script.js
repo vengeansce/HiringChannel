@@ -12,10 +12,7 @@ const options = {
   },
 };
 
-import {
-  API_ENGINEER_ENDPOINT,
-  API_EMPLOYEE_ENDPOINT,
-} from 'react-native-dotenv';
+import {API_ENGINEER_ENDPOINT, API_COMPANY_ENDPOINT} from 'react-native-dotenv';
 
 const toastr = (message, type) => {
   Toast.show({
@@ -80,7 +77,7 @@ const fetchEngineer = (id, callback) => {
 
 const fetchCompany = (id, callback) => {
   axios
-    .get(`${API_EMPLOYEE_ENDPOINT}/${id}`)
+    .get(`${API_COMPANY_ENDPOINT}/${id}`)
     .then(res => {
       const {values} = res.data;
       if (values.length > 0) {

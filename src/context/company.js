@@ -18,19 +18,11 @@ function getCompanies({page, search, show, sort}, callback) {
       `${API_COMPANY_ENDPOINT}?name=${search}&location=${search}&page=${page}&show=${show}&sort=${sort}`,
     )
     .then(res => {
-      const {
-        result,
-        page: currentPage,
-        previousPage,
-        nextPage,
-      } = res.data.values;
-      callback(result, {currentPage, previousPage, nextPage});
+      const {values, page: currentPage, previousPage, nextPage} = res.data;
+      callback(values, {currentPage, previousPage, nextPage});
     })
     // Kalo catch satu baris error
-    .catch(err => {
-      console.log(err);
-      toastr('Ops, network error');
-    });
+    .catch(err => toastr('Ops, network error'));
 }
 
 export {query, getCompanies};

@@ -88,10 +88,8 @@ const Account = props => {
         setProfile();
         toastr('Profile updated successfully', 'success');
       })
-      .catch(() => {
-        // toastr('File too large. Max: 1mb');
-        toastr('Please choose a picture again.');
-      });
+      // toastr('File too large. Max: 1mb');
+      .catch(() => toastr('Please choose a picture again.'));
   };
   function pickImage() {
     launchImageLibrary(res => {
