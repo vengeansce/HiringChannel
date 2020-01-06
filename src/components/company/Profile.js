@@ -89,6 +89,7 @@ const Account = props => {
         toastr('Profile updated successfully', 'success');
       })
       // toastr('File too large. Max: 1mb');
+      //err
       .catch(() => toastr('Please choose a picture again.'));
   };
   function pickImage() {
@@ -153,6 +154,7 @@ const Account = props => {
           <Item>
             <Input
               value={company.name}
+              placeholder="Your company name"
               onChangeText={text => setCompany({...company, name: text})}
             />
             <Text style={s.pr}>Name</Text>
@@ -160,6 +162,7 @@ const Account = props => {
           <Item>
             <Input
               value={company.location}
+              placeholder="e.g., Bekasi"
               onChangeText={text => setCompany({...company, location: text})}
             />
             <Text style={s.pr}>Address</Text>

@@ -99,6 +99,7 @@ const Account = props => {
         toastr('Profile updated successfully', 'success');
       })
       // toastr('File too large. Max: 1mb');
+      //err
       .catch(() => toastr('Please choose a picture again.'));
   };
   function pickImage() {

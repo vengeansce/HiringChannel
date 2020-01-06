@@ -14,8 +14,8 @@ const Card = props => {
 const s = StyleSheet.create({
   imgContainer: {
     width: '33.33%',
-    height: 100,
-    padding: 4,
+    height: 110,
+    padding: 1,
   },
   img: {
     width: '100%',

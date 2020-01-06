@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View, ActivityIndicator} from 'react-native';
 import {Container, Content, Button, Text} from 'native-base';
 
 import SearchBar from '../components/engineer/SearchBar';
@@ -22,35 +22,65 @@ function Engineers(props) {
   const {
     engineers,
     engineersQuery: {nextPage},
+    engineersShowMore: showMore,
+    loadingEngineers,
     dispatch,
   } = React.useContext(RootContext);
+  let content = '';
+  if (loadingEngineers) {
+    content = (
+      <Content contentContainerStyle={s.content}>
+        <ActivityIndicator size="large" />
+      </Content>
+    );
+  } else if (engineers.length < 1) {
+    content = (
+      <Content contentContainerStyle={s.content}>
+        <View>
+          <Text>Engineer Not Found</Text>
+        </View>
+      </Content>
+    );
+  } else {
+    let more = <View />;
+    const loadMore = () => {
+      dispatch.setEngineersQuery({page: nextPage, more: true});
+      dispatch.setEngineersShowMore(false);
+    };
+    if (engineers.length > 9) {
+      if (showMore) {
+        more = (
+          <Button info transparent style={s.centerH} onPress={loadMore}>
+            <Text>load more</Text>
+          </Button>
+        );
+      } else {
+        more = <ActivityIndicator size="large" />;
+      }
+    }
+    content = (
+      <Content>
+        <Picker />
+        {engineers.map((elm, i) => (
+          <Card
+            handlePress={() => navigate('Engineer', elm)}
+            name={elm.name}
+            skills={elm.skills}
+            updated={timeConverter(elm.updated)}
+            salary={elm.salary}
+            img={(() => (elm.img ? API_BASE_URL + elm.img : defaultImg))()}
+            key={i}
+          />
+        ))}
+        {more}
+      </Content>
+    );
+  }
   return (
     <>
       <Container>
         <SearchBar />
-        <Content>
-          <Picker />
-          {engineers.map((elm, i) => (
-            <Card
-              handlePress={() => navigate('Engineer', elm)}
-              name={elm.name}
-              skills={elm.skills}
-              updated={timeConverter(elm.updated)}
-              salary={elm.salary}
-              img={(() => (elm.img ? API_BASE_URL + elm.img : defaultImg))()}
-              key={i}
-            />
-          ))}
-          <Button
-            info
-            transparent
-            style={s.centerH}
-            onPress={() =>
-              dispatch.setEngineersQuery({page: nextPage, more: true})
-            }>
-            <Text>load more</Text>
-          </Button>
-        </Content>
+        {content}
         <Footer active="engineers" {...props} />
       </Container>
     </>
@@ -58,6 +88,11 @@ function Engineers(props) {
 }
 
 const s = StyleSheet.create({
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   centerH: {justifyContent: 'center'},
 });
 

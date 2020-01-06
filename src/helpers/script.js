@@ -70,9 +70,8 @@ const fetchEngineer = (id, callback) => {
         callback(null);
       }
     })
-    .catch(() => {
-      callback(null);
-    });
+    //err
+    .catch(() => callback(null));
 };
 
 const fetchCompany = (id, callback) => {

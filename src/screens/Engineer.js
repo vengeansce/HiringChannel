@@ -41,9 +41,8 @@ function Engineer(props) {
           setEngineer(res.data.values[0]);
         }
       })
-      .catch(err => {
-        toastr('Ops, network error');
-      });
+      //err
+      .catch(() => toastr('Ops, network error'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

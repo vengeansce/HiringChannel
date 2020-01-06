@@ -6,24 +6,35 @@ const RootContext = React.createContext();
 export function Provider(props) {
   let [engineersQuery, setEngineersQuery] = useState(engineersInitialState);
   let [engineers, setEngineers] = useState([]);
+  let [loadingEngineers, setLoadingEngineers] = useState(false);
+  let [engineersShowMore, setEngineersShowMore] = useState(true);
 
-  const fetchEngineers = () =>
+  const fetchEngineers = () => {
+    if (!engineersQuery.more) {
+      setLoadingEngineers(true);
+    }
     getEngineers(engineersQuery, (data, {nextPage}) =>
       setEngineers(prevState => {
+        setLoadingEngineers(false);
         engineersQuery.nextPage = nextPage;
         if (engineersQuery.more) {
+          setEngineersShowMore(true);
           return [...prevState, ...data];
         }
         return data;
       }),
     );
+  };
 
   let [companiesQuery, setCompaniesQuery] = useState(companiesInitialState);
   let [companies, setCompanies] = useState([]);
+  let [loadingCompanies, setLoadingCompanies] = useState(false);
 
-  const fetchCompanies = () =>
+  const fetchCompanies = () => {
+    setLoadingCompanies(true);
     getCompanies(companiesQuery, (data, {nextPage}) =>
       setCompanies(prevState => {
+        setLoadingCompanies(false);
         companiesQuery.nextPage = nextPage;
         if (companiesQuery.more) {
           return [...prevState, ...data];
@@ -31,9 +42,11 @@ export function Provider(props) {
         return data;
       }),
     );
+  };
 
   const dispatch = {
     fetchEngineers,
+    setEngineersShowMore: payload => setEngineersShowMore(payload),
     setEngineersQuery: payload =>
       setEngineersQuery({...engineersQuery, ...payload}),
     fetchCompanies,
@@ -49,7 +62,16 @@ export function Provider(props) {
 
   return (
     <RootContext.Provider
-      value={{engineers, engineersQuery, companies, companiesQuery, dispatch}}>
+      value={{
+        engineers,
+        engineersQuery,
+        engineersShowMore,
+        loadingEngineers,
+        companies,
+        companiesQuery,
+        loadingCompanies,
+        dispatch,
+      }}>
       {props.children}
     </RootContext.Provider>
   );

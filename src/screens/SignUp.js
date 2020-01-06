@@ -42,8 +42,8 @@ const SignUp = props => {
         );
         goBack();
       })
-      .catch(err => {
-        console.log(err);
+      //err
+      .catch(() => {
         setConfig({loading: false, error: true});
         toastr('Username or email already registered');
       });

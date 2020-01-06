@@ -11,7 +11,7 @@ export default function SearchBar() {
       <Item>
         <Icon name="search" />
         <Input
-          placeholder="Search by name, skills, or salary"
+          placeholder="Search..."
           value={engineersQuery.search}
           onChangeText={text =>
             dispatch.setEngineersQuery({...query, search: text})

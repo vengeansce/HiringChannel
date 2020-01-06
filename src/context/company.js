@@ -22,7 +22,8 @@ function getCompanies({page, search, show, sort}, callback) {
       callback(values, {currentPage, previousPage, nextPage});
     })
     // Kalo catch satu baris error
-    .catch(err => toastr('Ops, network error'));
+    //err
+    .catch(() => toastr('Ops, network error'));
 }
 
 export {query, getCompanies};
