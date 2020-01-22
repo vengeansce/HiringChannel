@@ -48,7 +48,6 @@ const Login = props => {
         setConfig({loading: false, error: false});
         storeData(res.data.values);
       })
-      //err
       .catch(() => {
         setConfig({loading: false, error: true});
         toastr('Incorrect username or password.');
