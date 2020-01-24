@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import {View, TextInput, ActivityIndicator} from 'react-native';
-import {Container, H1, Text, Button, Picker, Icon} from 'native-base';
+import {View, TextInput, ActivityIndicator, Image} from 'react-native';
+import {Container, Text, Button, Picker, Icon} from 'native-base';
 import s from '../style';
 
 import {toastr} from '../helpers/script';
@@ -51,8 +51,10 @@ const SignUp = props => {
   return (
     <Container style={s.center}>
       <View style={s.container}>
-        <H1 style={[s.textCenter, s.header]}>Hiring Channel</H1>
-        <View style={[s.section, s.center]}>
+        <View style={s.center}>
+          <Image source={require('../img/logo-name.png')} />
+        </View>
+        <View style={s.center}>
           <Picker
             mode="dropdown"
             iosIcon={<Icon name="arrow-down" />}

@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-import {View, TextInput, ActivityIndicator} from 'react-native';
-import {Container, H1, Text, Button} from 'native-base';
+import {View, TextInput, ActivityIndicator, Image} from 'react-native';
+import {Container, Text, Button} from 'native-base';
 
-import {getDataStorage, toastr} from '../helpers/script';
+import {toastr} from '../helpers/script';
 import s from '../style';
 
 import {API_ENDPOINT} from 'react-native-dotenv';
@@ -13,11 +13,6 @@ const Login = props => {
   const {
     navigation: {navigate},
   } = props;
-  getDataStorage('token', token => {
-    if (token !== null) {
-      navigate('Engineers');
-    }
-  });
   let [user, setUser] = useState('');
   let [password, setPassword] = useState('');
   let [config, setConfig] = useState({
@@ -56,7 +51,9 @@ const Login = props => {
   return (
     <Container style={s.center}>
       <View style={s.container}>
-        <H1 style={[s.textCenter, s.header]}>Hiring Channel</H1>
+        <View style={s.center}>
+          <Image source={require('../img/logo-name.png')} />
+        </View>
         <View style={s.section}>
           <Text>Username or email</Text>
           <TextInput

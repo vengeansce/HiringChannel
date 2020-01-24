@@ -1,8 +1,10 @@
 import React from 'react';
 import {Root} from 'native-base';
-import {createAppContainer} from 'react-navigation';
+import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {fadeIn as transition} from 'react-navigation-transitions';
+
+import AuthLoading from './src/screens/AuthLoading';
 
 import Login from './src/screens/Login';
 import SignUp from './src/screens/SignUp';
@@ -30,7 +32,12 @@ const mainNavigator = createStackNavigator(
   },
 );
 
-const AppContainer = createAppContainer(mainNavigator);
+const AppContainer = createAppContainer(
+  createSwitchNavigator({
+    AuthLoading,
+    mainNavigator,
+  }),
+);
 
 const App = () => (
   <Provider>
