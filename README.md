@@ -1,6 +1,14 @@
-# Hiring Channel
+<h1 align="center">Hiring Channel</h1>
+<p align="center">
+  <img src="./screenshoot/logo.png"/>
+</p>
+<p align="center">
+  Built with React Native
+</p>
 
-Hiring Channel is mobile applications where Engineer and Company can communicate for looking/hiring jobs.
+## Introduction
+
+<b>Hiring Channel</b> is mobile applications where Engineer and Company can communicate for looking/hiring jobs.
 
 ## Built With
 * [React Native](https://facebook.github.io/react-native/)
@@ -57,6 +65,11 @@ API_COMPANY_ENDPOINT=https://hiring-channel-api.herokuapp.com/api/v1/companies
     <img width="250" src="./screenshoot/about-company.png">
     <img width="250" src="./screenshoot/engineer.png">
 </div>
+
+## Release APK
+<a href="https://drive.google.com/file/d/1TsV7oFRQT9rwUf5GnfUkMLV0Fp7s5r44/view?usp=sharing">
+  <img src="https://img.shields.io/badge/Download%20on%20the-Google%20Drive-blue.svg?style=popout&logo=google-drive"/>
+</a>
 
 ## Related Project (API)
 * [Hiring Channel API](https://github.com/vengeansce/hiring-channel-api/)
